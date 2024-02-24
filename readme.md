@@ -57,6 +57,8 @@ port 4723 (given in wdio)
 
 netstat -ano | findstr :<PORT>
 
+netstat -ano | findstr :4723
+
 taskkill /PID <PID> /F
 
 # setup emulator and appium inspector
@@ -148,6 +150,15 @@ it('Find Element by class name', async () => {
 Android UI Automator
 
 - provides search capabilites
+
+```js
+it('Find elements by UIAutomator', async () => {
+  //find by text contains
+  await $('~App').click();
+  await $('android=new UiSelector().textContains("Alert")').click();
+});
+```
+
 -
 
 Reference:
@@ -158,3 +169,167 @@ https://developer.android.com/reference/androidx/test/uiautomator/UiSelector
 # finding multiple elements
 
 -- use $$ to access multiple elements
+
+# 6 Android- Native Features
+
+## Package & Activity -Android
+
+there are some keywords which we should aware of
+
+> appPackage
+
+it is full name of our application
+eg for youtube it is 'com.google.android.youtube'
+
+> appActivity
+
+certain screen/functionality of the application
+eg for our app it is MainActivity, Alert Dialog samples
+
+advantages of using package and activitity is :
+
+- we can access the screen directly
+- save time by not going through multiple pages
+- helps with test stabilization
+
+Also we can get these va;ues from the appim inspector
+
+for package:
+I can select any element and then on right hand section under "select element" we get the package name
+
+for activity:
+after navigatting to screen
+
+App> alert dialogs
+
+then at top we have tabs source, commands, gesture, sesssion information
+
+navigate to Commands tab
+
+and click app managment > we have multiple tabs there
+
+"getCurrent activity " and "get current packahe"
+
+by clicking on these we get both the values
+
+```js
+//we
+it('access an activity directly', async () => {
+  //access an activity, pass 1st argument as package and second argument as combination of (package+ activity)
+  await driver.startActivity('io.appium.android.apis', 'io.appium.android.apis.app.AlertDialogSamples');
+
+  //pause
+  driver.pause(3000);
+  //assertion
+  await expect($('//*[@text="App/Alert Dialogs"]')).toExist();
+});
+```
+
+## handling dialog/alert box:
+
+Agenda:
+
+for alerts, we can
+
+- accept alert
+- dismiss alert
+- click ok/cancel
+
+get text from alert?
+
+```js
+it('Working with dialog boxes', async () => {
+  //access an activity
+  await driver.startActivity('io.appium.android.apis', 'io.appium.android.apis.app.AlertDialogSamples');
+
+  // //click on first dialog box
+  await $('//*[@resource-id="io.appium.android.apis:id/two_buttons"]').click();
+
+  // //accept alert
+  await driver.acceptAlert();
+
+  // //dismisss alert
+  await driver.dismissAlert();
+
+  // //click on ok button
+  await $("//*[@resource-id='android:id/button1']").click();
+
+  //get text
+  const text = await driver.getAlertText();
+
+  // //assertion- alert box is no longer available
+  // await expect($('//*[@resource-id="android:id/alertTitle"]')).not.toExist();
+});
+```
+
+# vertical scrolling
+
+-working with elements that are not visible within the viewport
+
+- finding whether element is scrollable?
+  - scroll to end
+  - scroll text into view
+
+for scroll we have "UiScrollable" class, within we have method
+"ScrollToEnd" which takes two params:
+
+maxSwipes- type int
+steps: speed of swipe
+
+to check whether it is scrollable==>scrollable(true)
+
+> await $('android=new UIScrollable(new UiSelector().scrollable(true)).scrollToEnd(1,5)')
+
+```js
+it.only('Vertical scrolling', async () => {
+  //access an activity
+  await $('~App').click();
+  await $('~Activity').click();
+
+  //scroll to end
+  await $('android=new UiScrollable(new UiSelector().scrollable(true)).scrollToEnd(1,5)');
+  await $('~Secure Surfaces').click();
+
+  //assertion
+  await expect($('~Secure Dialog')).toExist();
+});
+```
+
+or better way then this is to
+
+```js
+it.only('Vertical scrolling', async () => {
+  //access an activity
+  await $('~App').click();
+  await $('~Activity').click();
+
+  //scroll to end
+  // await $('android=new UiScrollable(new UiSelector().scrollable(true)).scrollToEnd(1,5)');
+
+  //here we are scrolling if text is not on the screen
+
+  await $('android=new UiScrollable(new UiSelector().scrollable(true)).scrollTextIntoView("Secure Surfaces")').click();
+  // await $('~Secure Surfaces').click();
+
+  //assertion
+  await expect($('~Secure Dialog')).toExist();
+});
+```
+
+# horizontal scrolling
+
+similar to vertical , we do it for horizaontal rthis time
+
+```ts
+it.only('horizontal scrolling', async () => {
+  await driver.startActivity('io.appium.android.apis', 'io.appium.android.apis.view.Gallery1');
+
+  //horizontal scrolling- we will add ".setAsHorizontalList()" in the prev command we used for vertical
+  await $('android=new UiScrollable(new UiSelector().scrollable(true)).setAsHorizontalList().scrollForward()');
+
+  //for backward scroll horizontally
+  await $('android=new UiScrollable(new UiSelector().scrollable(true)).setAsHorizontalList().scrollBackward()');
+
+  await driver.pause(3000);
+});
+```

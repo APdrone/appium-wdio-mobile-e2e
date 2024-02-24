@@ -72,7 +72,7 @@ describe('Android Element tests', () => {
     await expect(actualList).toEqual(expectedList);
   });
 
-  it.only('Enter input in text field', async () => {
+  it('Enter input in text field', async () => {
     await $('~Views').click();
 
     await $('//android.widget.TextView[@text="Auto Complete"]').click();

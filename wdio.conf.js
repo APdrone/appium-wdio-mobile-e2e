@@ -26,7 +26,8 @@ export const config = {
   //
   specs: [
     // ToDo: define location for spec files here
-    './test/specs/**/*.js',
+    // './test/specs/**/*.js',
+    './test/specs/**/android-native.spec.js',
   ],
   // Patterns to exclude.
   exclude: [
@@ -63,6 +64,14 @@ export const config = {
       'appium:app': path.join(process.cwd(), 'app/android/ApiDemos-debug.apk'),
       'appium:autoGrantPermissions': true,
     },
+    // {
+    //   platformName: 'Android',
+    //   'appium:platformVersion': '11.0',
+    //   'appium:deviceName': 'Pixel XL API 30',
+    //   'appium:automationName': 'UIAutomator2',
+    //   'appium:app': path.join(process.cwd(), 'app/android/ApiDemos-debug.apk'),
+    //   'appium:autoGrantPermissions': true,
+    // },
     // {
     //   'appium:platformName': 'Android',
     //   'appium:platformVersion': '12.0',
