@@ -25,7 +25,7 @@ need to install drivers as well
 
 to check its installation, use:
 
-> appium driver list
+> npx appium driver list
 
 Remote Port: Update port to 4724 and run Appium on the same port as well by doing appium -p 4724
 
@@ -333,3 +333,46 @@ it.only('horizontal scrolling', async () => {
   await driver.pause(3000);
 });
 ```
+
+# testing real app
+
+add new app in the repo and update its path in wdio
+
+```js
+
+ {
+      // new app
+      platformName: 'Android',
+      'appium:platformVersion': '13.0',
+      'appium:deviceName': 'Pixel 2 API 33',
+      'appium:automationName': 'UIAutomator2',
+      'appium:app': path.join(process.cwd(), 'app/android/ColorNote+Notepad.apk'),
+      'appium:autoGrantPermissions': true,
+    },
+
+```
+
+# handle permission
+
+when we open the app we get the pop up whether to allow app to access media, other . to handle it we can add below in wdio.conf.ts
+
+> 'appium:autoGrantPermissions': true,
+
+so now when we run the test, we wont see the pop up and the permission is given to it
+
+# skip tutoraial :
+
+when we open app, it shows the "tuturoal" on how to use the note app
+
+# add notes
+
+refer this for test
+test\specs\android\add-note.spec.js
+
+# page object Model(Android)
+
+## setup screen objects
+
+# Ios Set and configurations:
+
+# framework design

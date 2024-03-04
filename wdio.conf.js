@@ -27,7 +27,9 @@ export const config = {
   specs: [
     // ToDo: define location for spec files here
     // './test/specs/**/*.js',
-    './test/specs/**/android-native.spec.js',
+    // './test/specs/**/android-native.spec.js',
+    // './test/specs/**/android/*.js',
+    './test/specs/**/android/add-note-screen.spec.js',
   ],
   // Patterns to exclude.
   exclude: [
@@ -56,14 +58,25 @@ export const config = {
   // https://saucelabs.com/platform/platform-configurator
   //
   capabilities: [
+    // {
+    //   // old app
+    //   platformName: 'Android',
+    //   'appium:platformVersion': '13.0',
+    //   'appium:deviceName': 'Pixel 2 API 33',
+    //   'appium:automationName': 'UIAutomator2',
+    //   'appium:app': path.join(process.cwd(), 'app/android/ApiDemos-debug.apk'),
+    //   'appium:autoGrantPermissions': true,
+    // },
     {
+      // new app
       platformName: 'Android',
       'appium:platformVersion': '13.0',
       'appium:deviceName': 'Pixel 2 API 33',
       'appium:automationName': 'UIAutomator2',
-      'appium:app': path.join(process.cwd(), 'app/android/ApiDemos-debug.apk'),
+      'appium:app': path.join(process.cwd(), 'app/android/ColorNote+Notepad.apk'),
       'appium:autoGrantPermissions': true,
     },
+
     // {
     //   platformName: 'Android',
     //   'appium:platformVersion': '11.0',
