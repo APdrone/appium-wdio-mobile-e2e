@@ -8,7 +8,7 @@ describe('Android Element tests', () => {
 
     //assertion
     const actionBar = await $('~Action Bar');
-    expect(actionBar).toBeExisting();
+    await expect(actionBar).toBeExisting();
   });
 
   it('Find Element by class name', async () => {
